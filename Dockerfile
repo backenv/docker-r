@@ -17,41 +17,40 @@ RUN aptitude -yq install \
 #    r-base-core
 
 RUN aptitude -yq install \
-      libcairo2-dev \
-      libmariadb2 \
-      libmariadb-dev \
       libnlopt-dev \
+      libcairo2-dev \
       libxml2-dev \
       xml2
 
+#      libmariadb2 \
+#      libmariadb-dev \
 #      libatlas3-base \
 #      libopenblas-base \
 #      libcurl4-openssl-dev \
-
 
 # Install R packages
 ## Other options
 #      GPArotation \
 
-RUN install.r -r https://cloud.r-project.org/ \
-      abind \
-      ca \
-      class \
-      cluster \
-      ggplot2 \
-      graph \
-      gridExtra \
-      Hmisc \
-      jsonlite \
-      knitr \
-      nloptr \
-      psych \
-      RcmdrMisc \
-      RMySQL \
-      semPlot \
-      svglite \
-      vegan \
-      yaml
+RUN R -e "for (i in c( \
+    'abind', \
+    'ca', \
+    'class', \
+    'cluster', \
+    'ggplot2', \
+    'Hmisc', \
+    'jsonlite', \
+    'knitr', \
+    'nloptr', \
+    'psych', \
+    'qgraph', \
+    'RcmdrMisc', \
+    'RMySQL', \
+    'semPlot', \
+    'svglite', \
+    'vegan', \
+    'yaml') \
+    ) {install.packages(i)}"
 
 # Clean installation
 RUN apt clean && aptitude autoremove \
