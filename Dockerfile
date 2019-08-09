@@ -13,19 +13,21 @@ RUN echo "deb http://cloud.r-project.org/bin/linux/debian buster-cran35/" > /etc
   && apt update
 
 RUN aptitude -yq install \
-    r-base \
-    r-base-core
+    r-base
+#    r-base-core
 
 RUN aptitude -yq install \
-      libatlas3-base \
-      libopenblas-base \
-      libcurl4-openssl-dev \
       libcairo2-dev \
       libmariadb2 \
       libmariadb-dev \
       libnlopt-dev \
       libxml2-dev \
       xml2
+
+#      libatlas3-base \
+#      libopenblas-base \
+#      libcurl4-openssl-dev \
+
 
 # Install R packages
 ## Other options
