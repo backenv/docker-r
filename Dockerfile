@@ -1,17 +1,22 @@
-FROM debian:testing
+FROM debian:10
 
-RUN apt-get update \
-  && apt-get -yq --no-install-recommends install \
+RUN apt update \
+  && apt -yq install \
     jq \
     curl \
     gpg \
-    dirmngr
+    dirmngr \
+    aptitude
 
-RUN echo "deb https://cloud.r-project.org/bin/linux/debian testing" > /etc/apt/sources.list.d/r-cran.list \
-  && apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
+RUN echo "deb http://cloud.r-project.org/bin/linux/debian buster-cran35/" > /etc/apt/sources.list.d/r-cran.list \
+  && apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' \
+  && apt update
 
-RUN apt-get -t testing -yq install \
-      r-base \
+RUN aptitude -yq install \
+    r-base \
+    r-base-core
+
+RUN aptitude -yq install \
       libatlas3-base \
       libopenblas-base \
       libcurl4-openssl-dev \
@@ -23,6 +28,9 @@ RUN apt-get -t testing -yq install \
       xml2
 
 # Install R packages
+## Other options
+#      GPArotation \
+
 RUN install.r -r https://cloud.r-project.org/ \
       abind \
       ca \
@@ -30,23 +38,21 @@ RUN install.r -r https://cloud.r-project.org/ \
       cluster \
       ggplot2 \
       graph \
-      GPArotation \
       gridExtra \
       Hmisc \
       jsonlite \
       knitr \
       nloptr \
       psych \
-      psych \
       RcmdrMisc \
       RMySQL \
       semPlot \
       svglite \
       vegan \
-      yaml \
+      yaml
 
 # Clean installation
- apt-get clean \
+RUN apt clean && aptitude autoremove \
   && rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
   && rm -rf /var/lib/apt/lists/*
 
