@@ -32,7 +32,7 @@ RUN aptitude -yq install \
 ## Other options
 #      GPArotation \
 
-RUN R -e "for (i in c( \
+RUN R -e "cat('Starting package installation'); for (i in c( \
     'abind', \
     'ca', \
     'class', \
@@ -50,11 +50,16 @@ RUN R -e "for (i in c( \
     'svglite', \
     'vegan', \
     'yaml') \
-    ) {install.packages(i)}"
+    ) {if (length(grep(i,rownames(installed.packages()))) == 0L) install.packages(i)}"
 
 # Clean installation
-RUN apt clean && aptitude autoremove \
+RUN apt clean && aptitude autoclean \
   && rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
   && rm -rf /var/lib/apt/lists/*
 
+# Create User
+
+# Set Workdir
+
+# Start CMD
 CMD R
